@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Product;
 use App\Models\SessionToken;
@@ -11,6 +12,7 @@ use App\Validations\UserValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class ProductService extends BaseService
 {
@@ -70,16 +72,15 @@ class ProductService extends BaseService
      *
      * @param Request $request
      */
-    public function store(UserRequest $request)
+    public function store(ProductRequest $request)
     {
         try {
             $values = $request->validated();
-            $values["password"] = Hash::make($values["password"]);
-            $user = User::create($values);
+            $item = Product::create($values);
 
-            $response = \response_success_default("Berhasil menambahkan user!", $user->id, route("app.users.show", $user->id));
+            $response = \response_success_default("Berhasil menambahkan produk!", $item->id, route("app.products.show", $item->id));
         } catch (\Exception $e) {
-            ErrorService::error($e, "Gagal store user!");
+            ErrorService::error($e, "Gagal store produk!");
             $response = \response_errors_default();
         }
 

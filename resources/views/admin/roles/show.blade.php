@@ -39,10 +39,10 @@
             </tr>
           </thead>
           <tbody>
-            @forelse ($users as $user)
+            @forelse ($users as $data)
               <tr>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
+                <td>{{ $data->name }}</td>
+                <td>{{ $data->email }}</td>
               </tr>
             @empty
               <tr>
@@ -124,13 +124,13 @@
               </tr>
             </thead>
             <tbody>
-              @forelse ($user_other as $user)
+              @forelse ($user_other as $data)
                 <tr>
-                  <td>{{ $user->name }}</td>
-                  <td>{{ $user->role->role_name }}</td>
+                  <td>{{ $data->name }}</td>
+                  <td>{{ $data->role->role_name }}</td>
                   <td>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="user_id[]" value="{{ $user->id }}">
+                      <input class="form-check-input" type="checkbox" name="user_id[]" value="{{ $data->id }}">
                       <label class="form-check-label">Pilih</label>
                     </div>
                   </td>

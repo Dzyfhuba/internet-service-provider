@@ -5,7 +5,7 @@
   <div class="card">
     <div class="card-body">
 
-      <form action="{{ route('app.users.update', $user->id) }}" method="POST" with-submit-crud>
+      <form action="{{ route('app.users.update', $data->id) }}" method="POST" with-submit-crud>
         @csrf
         @method("PUT")
 

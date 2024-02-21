@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ProductController extends Controller
     public function index(): View
     {
         $data = Product::all();
-        return $this->view_admin('admin.products.index', 'Products', first_page: false);
+        return $this->view_admin('admin.products.index', 'Produk', first_page: false);
     }
 
     public function get(Request $request)
@@ -66,7 +67,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return $this->view_admin('admin.products.create', 'Tambah Produk');
     }
 
     /**
@@ -75,9 +76,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $response = $this->service->store($request);
+        return \response_json($response);
     }
 
     /**
