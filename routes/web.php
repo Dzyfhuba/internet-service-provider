@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apps\DashboardController;
 use App\Http\Controllers\Apps\ProductController;
+use App\Http\Controllers\Apps\ProductOfSaleController;
 use App\Http\Controllers\Apps\ProjectSettingController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\UserController;
@@ -44,6 +45,9 @@ Route::middleware(["auth", "check_maintanance", "check_session_token"])->group(f
 
     Route::resource("/app/products", ProductController::class, ["as" => "app"])->middleware("check_authorized:003U|004R")->except('post');
     Route::post("/app/products/get", [ProductController::class, "get"])->name("app.products.get")->middleware("check_authorized:003U|004R");
+
+    Route::resource("/app/product-of-sales", ProductOfSaleController::class, ["as" => "app"])->middleware("check_authorized:003U|004R")->except('post');
+    Route::post("/app/product-of-sales/get", [ProductOfSaleController::class, "get"])->name("app.product-of-sales.get")->middleware("check_authorized:003U|004R");
 
     Route::post("/app/users/get", [UserController::class, "get"])->name("app.users.get")->middleware("check_authorized:003U");
     Route::resource("/app/users", UserController::class, ["as" => "app"])->middleware("check_authorized:003U|004R");

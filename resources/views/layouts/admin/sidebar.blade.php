@@ -60,6 +60,15 @@
                 @endif
 
                 @if (check_authorized("003U|004R"))
+                <li class="sidebar-item {{ request()->segment(2) == 'product-of-sales' ? 'active' : '' }}">
+                    <a href="{{ route('app.product-of-sales.index') }}" class='sidebar-link'>
+                        <i class="bi bi-list-ul"></i>
+                        <span>Product Of Sales</span>
+                    </a>
+                </li>
+                @endif
+
+                @if (check_authorized("003U|004R"))
                 <li class="sidebar-item {{ request()->segment(2) == 'users' ? 'active' : '' }}">
                     <a href="{{ route('app.users.index') }}" class='sidebar-link'>
                         <i class="bi bi-person-lines-fill"></i>
