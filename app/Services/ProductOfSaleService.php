@@ -27,7 +27,7 @@ class ProductOfSaleService extends BaseService
     {
         $column_search = ["p.product_name", "p.product_description"];
         $column_order = [
-            NULL, "p.product_name", "p.product_description", 'p.product_price_capital', 'p.product_price_sell',
+            NULL, "p.product_name", "p.product_description", 'product_sales.final_price_capital', 'product_sales.final_price_sell',
             'product_sales.quantity'
         ];
         $order = ["product_sales.id" => "DESC"];
@@ -84,70 +84,12 @@ class ProductOfSaleService extends BaseService
             $values = $request->validated();
             $item = ProductOfSale::create($values);
 
-            $response = \response_success_default("Berhasil menambahkan penjualan produk!", $item->id, route("app.product-of-sales.show", $item->id));
+            $response = \response_success_default("Berhasil menambahkan penjualan produk!", $item->id, route("app.product-of-sales.index"));
         } catch (\Exception $e) {
             ErrorService::error($e, "Gagal store penjualan produk!");
             $response = \response_errors_default();
         }
 
         return $response;
-    }
-
-    /**
-     * Update new user
-     *
-     * @param Request $request
-     * @param User $product
-     */
-    public function update(ProductRequest $request, Product $product)
-    {
-        try {
-            $product_id = $product->id;
-            $values = $request->validated();
-
-            $product->update($values);
-
-            $response = \response_success_default("Berhasil update data produk!", $product_id, route("app.products.show", $product->id));
-        } catch (\Exception $e) {
-            ErrorService::error($e, "Gagal update produk!");
-            $response = \response_errors_default();
-        }
-
-        return $response;
-    }
-
-    /**
-     * Get last admin online
-     *
-     */
-    public function get_admin_online()
-    {
-        $query = SessionToken::query()
-            ->select([
-                "u.name",
-                "session_tokens.active_time",
-                "u.id",
-                DB::raw("MAX(session_tokens.active_time) AS max_time")
-            ])
-            ->join("users AS u", "u.id", "session_tokens.user_id")
-            ->where("is_login", 1)
-            ->having("max_time", ">", DB::raw("(NOW() - INTERVAL 15 MINUTE)"))
-            ->groupBy("session_tokens.user_id")
-            ->get()
-            ->map(function ($item) {
-                $to_time = strtotime(date("Y-m-d H:i:s"));
-                $from_time = strtotime($item->max_time);
-                $last_active = round(abs($to_time - $from_time) / 60);
-                if ($last_active <= 0) {
-                    $last_active = "Active";
-                } else {
-                    $last_active .= "m ago";
-                }
-
-                $item->last_active = $last_active;
-                return $item;
-            });
-
-        return $query;
     }
 }

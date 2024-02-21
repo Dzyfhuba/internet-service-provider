@@ -109,39 +109,4 @@ class ProductService extends BaseService
 
         return $response;
     }
-
-    /**
-     * Get last admin online
-     *
-     */
-    public function get_admin_online()
-    {
-        $query = SessionToken::query()
-            ->select([
-                "u.name",
-                "session_tokens.active_time",
-                "u.id",
-                DB::raw("MAX(session_tokens.active_time) AS max_time")
-            ])
-            ->join("users AS u", "u.id", "session_tokens.user_id")
-            ->where("is_login", 1)
-            ->having("max_time", ">", DB::raw("(NOW() - INTERVAL 15 MINUTE)"))
-            ->groupBy("session_tokens.user_id")
-            ->get()
-            ->map(function ($item) {
-                $to_time = strtotime(date("Y-m-d H:i:s"));
-                $from_time = strtotime($item->max_time);
-                $last_active = round(abs($to_time - $from_time) / 60);
-                if ($last_active <= 0) {
-                    $last_active = "Active";
-                } else {
-                    $last_active .= "m ago";
-                }
-
-                $item->last_active = $last_active;
-                return $item;
-            });
-
-        return $query;
-    }
 }

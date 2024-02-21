@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductOfSaleRequest;
 use App\Models\Product;
+use App\Models\ProductOfSale;
 use App\Services\ProductOfSaleService;
 use Illuminate\Http\Request;
 
@@ -38,10 +39,13 @@ class ProductOfSaleController extends Controller
             $row = [];
             $row[] = $no;
             $row[] = $item->product_name;
-            $row[] = rupiah($item->product_price_sell * $item->quantity);
-            $button = "<a href='" . \route("app.product-of-sales.show", $item->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
-            $button .= form_delete("form$item->id", route("app.product-of-sales.destroy", $item->id));
-            $button .= form_update("form$item->id", route("app.product-of-sales.edit", $item->id));
+            $row[] = $item->quantity;
+            $row[] = rupiah($item->final_price_capital * $item->quantity);
+            $row[] = rupiah($item->final_price_sell * $item->quantity);
+            $row[] = rupiah($item->final_price_sell * $item->quantity - $item->final_price_capital * $item->quantity);
+            $row[] = date($item->updated_at);
+            // $button = "<a href='" . \route("app.product-of-sales.show", $item->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
+            $button = form_delete("form$item->id", route("app.product-of-sales.destroy", $item->id));
             $row[] = $button;
             $data[] = $row;
         }
@@ -66,7 +70,7 @@ class ProductOfSaleController extends Controller
         $products = Product::all()->toArray();
         // dd($products);
         return $this->view_admin('admin.product-of-sales.create', 'Tambahkan Data Penjualan Produk', [
-            'products' => implode('', array_map(fn ($product) => "<option value='{$product['id']}'>{$product['product_name']}</option>", $products))
+            'products' => implode('', array_map(fn($product) => "<option value='{$product['id']}'>{$product['product_name']}</option>", $products))
         ]);
         // implode('', array_map(fn ($product) => "<option value='{$product['id']}'>{$product['product_name']}</option>", $products));
     }
@@ -123,8 +127,10 @@ class ProductOfSaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ProductOfSale $item)
     {
-        //
+        $item->delete();
+        $response = \response_success_default("Berhasil hapus pencatatan product!", FALSE, \route("app.product-of-sales.index"));
+        return \response_json($response);
     }
 }

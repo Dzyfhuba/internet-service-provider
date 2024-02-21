@@ -17,7 +17,10 @@ return new class extends Migration
         Schema::create('product_sales', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class);
+            $table->integer('final_price_capital');
+            $table->integer('final_price_sell');
             $table->integer('quantity')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

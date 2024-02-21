@@ -4,7 +4,7 @@
     </div>
     <div class="col-md-{{ $col2 ?? 6 }}">
         <input type="{{ $type ?? 'text' }}" class="form-control" name="{{ $name }}" value="{{ $value ?? '' }}"
-            placeholder="{{ $placeholder ?? '' }}" {{ $required ?? "" }} {{$min ? "min=$min" : "" }}>
+            placeholder="{{ $placeholder ?? '' }}" {{ $required ?? "" }} {{isset($min) ? "min=$min" : "" }}>
         <div></div>
     </div>
 </div>

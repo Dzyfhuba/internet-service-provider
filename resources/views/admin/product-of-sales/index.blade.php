@@ -15,9 +15,11 @@
                 <tr>
                     <th>No</th>
                     <th>Product</th>
-                    <th>Description</th>
-                    <th>Capital Price</th>
-                    <th>Sell Price</th>
+                    <th>Kuantitas</th>
+                    <th>Capital Price Total</th>
+                    <th>Sell Price Total</th>
+                    <th>Laba</th>
+                    <th>Tanggal Transaksi</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
