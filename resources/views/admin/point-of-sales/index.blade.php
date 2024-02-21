@@ -6,7 +6,7 @@
     <div class="card-body table-responsive">
 
         @if (check_authorized("003U"))
-        <a href="{{ route('app.product-of-sales.create') }}" class="btn btn-success btn-sm mb-3">Tambah</a>
+        <a href="{{ route('app.point-of-sales.create') }}" class="btn btn-success btn-sm mb-3">Tambah</a>
         @endif
 
         @if (check_authorized("003U"))
@@ -35,7 +35,7 @@
 @if (check_authorized("003U"))
 @push('script')
 <script>
-    CORE.dataTableServer("table1", "/app/product-of-sales/get");
+    CORE.dataTableServer("table1", "/app/point-of-sales/get");
 </script>
 @endpush
 @endif

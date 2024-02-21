@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductOfSaleRequest;
+use App\Http\Requests\PointOfSaleRequest;
 use App\Models\Product;
-use App\Models\ProductOfSale;
-use App\Services\ProductOfSaleService;
+use App\Models\PointOfSale;
+use App\Services\PointOfSaleService;
 use Illuminate\Http\Request;
 
-class ProductOfSaleController extends Controller
+class PointOfSaleController extends Controller
 {
-    private ProductOfSaleService $service;
+    private PointOfSaleService $service;
     public function __construct()
     {
-        $this->service = new ProductOfSaleService;
+        $this->service = new PointOfSaleService;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +23,7 @@ class ProductOfSaleController extends Controller
      */
     public function index()
     {
-        return $this->view_admin('admin.product-of-sales.index', 'Product Of Sales', first_page: true);
+        return $this->view_admin('admin.point-of-sales.index', 'Point Of Sales', first_page: true);
     }
 
     public function get(Request $request)
@@ -44,8 +44,8 @@ class ProductOfSaleController extends Controller
             $row[] = rupiah($item->final_price_sell * $item->quantity);
             $row[] = rupiah($item->final_price_sell * $item->quantity - $item->final_price_capital * $item->quantity);
             $row[] = date($item->updated_at);
-            // $button = "<a href='" . \route("app.product-of-sales.show", $item->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
-            $button = form_delete("form$item->id", route("app.product-of-sales.destroy", $item->id));
+            // $button = "<a href='" . \route("app.point-of-sales.show", $item->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
+            $button = form_delete("form$item->id", route("app.point-of-sales.destroy", $item->id));
             $row[] = $button;
             $data[] = $row;
         }
@@ -69,7 +69,7 @@ class ProductOfSaleController extends Controller
     {
         $products = Product::all()->toArray();
         // dd($products);
-        return $this->view_admin('admin.product-of-sales.create', 'Tambahkan Data Penjualan Produk', [
+        return $this->view_admin('admin.point-of-sales.create', 'Tambahkan Data Penjualan Produk', [
             'products' => implode('', array_map(fn($product) => "<option value='{$product['id']}'>{$product['product_name']}</option>", $products))
         ]);
         // implode('', array_map(fn ($product) => "<option value='{$product['id']}'>{$product['product_name']}</option>", $products));
@@ -81,7 +81,7 @@ class ProductOfSaleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductOfSaleRequest $request)
+    public function store(PointOfSaleRequest $request)
     {
         $response = $this->service->store($request);
         return \response_json($response);
@@ -127,10 +127,10 @@ class ProductOfSaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductOfSale $item)
+    public function destroy(PointOfSale $item)
     {
         $item->delete();
-        $response = \response_success_default("Berhasil hapus pencatatan product!", FALSE, \route("app.product-of-sales.index"));
+        $response = \response_success_default("Berhasil hapus pencatatan product!", FALSE, \route("app.point-of-sales.index"));
         return \response_json($response);
     }
 }

@@ -60,8 +60,8 @@
                 @endif
 
                 @if (check_authorized("003U|004R"))
-                <li class="sidebar-item {{ request()->segment(2) == 'product-of-sales' ? 'active' : '' }}">
-                    <a href="{{ route('app.product-of-sales.index') }}" class='sidebar-link'>
+                <li class="sidebar-item {{ request()->segment(2) == 'point-of-sales' ? 'active' : '' }}">
+                    <a href="{{ route('app.point-of-sales.index') }}" class='sidebar-link'>
                         <i class="bi bi-list-ul"></i>
                         <span>Product Of Sales</span>
                     </a>

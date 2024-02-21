@@ -1,11 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Http\Requests\ProductOfSaleRequest;
+use App\Http\Requests\PointOfSaleRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Product;
-use App\Models\ProductOfSale;
+use App\Models\PointOfSale;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Services\Cores\BaseService;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class ProductOfSaleService extends BaseService
+class PointOfSaleService extends BaseService
 {
     /**
      * Generate query index page
@@ -32,7 +32,7 @@ class ProductOfSaleService extends BaseService
         ];
         $order = ["product_sales.id" => "DESC"];
 
-        $results = ProductOfSale::query()
+        $results = PointOfSale::query()
             ->where(function ($query) use ($request, $column_search) {
                 $i = 1;
                 if (isset($request->search)) {
@@ -77,18 +77,18 @@ class ProductOfSaleService extends BaseService
      *
      * @param Request $request
      */
-    public function store(ProductOfSaleRequest $request)
+    public function store(PointOfSaleRequest $request)
     {
         try {
             $values = $request->validated();
             $product = Product::find($values['product_id']);
-            $item = ProductOfSale::create([
+            $item = PointOfSale::create([
                 'product_name' => $product['product_name'],
                 'final_price_capital' => $product['product_price_capital'],
                 'final_price_sell' => $product['product_price_sell'],
             ]);
 
-            $response = \response_success_default("Berhasil menambahkan penjualan produk!", $item->id, route("app.product-of-sales.index"));
+            $response = \response_success_default("Berhasil menambahkan penjualan produk!", $item->id, route("app.point-of-sales.index"));
         } catch (\Exception $e) {
             ErrorService::error($e, "Gagal store penjualan produk!");
             $response = \response_errors_default();
