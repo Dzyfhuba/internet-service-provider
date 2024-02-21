@@ -29,7 +29,6 @@ class UserController extends Controller
   {
     $users = $this->user_service->get_list_paged($request);
     $count = $this->user_service->get_list_count($request);
-
     $data = [];
     $no = $request->start;
 
