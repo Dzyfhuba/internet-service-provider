@@ -63,7 +63,7 @@
                 <li class="sidebar-item {{ request()->segment(2) == 'point-of-sales' ? 'active' : '' }}">
                     <a href="{{ route('app.point-of-sales.index') }}" class='sidebar-link'>
                         <i class="bi bi-list-ul"></i>
-                        <span>Product Of Sales</span>
+                        <span>Point Of Sales</span>
                     </a>
                 </li>
                 @endif

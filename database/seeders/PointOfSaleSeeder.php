@@ -18,11 +18,14 @@ class PointOfSaleSeeder extends Seeder
     {
         foreach (range(0, 1000) as $value) {
             $product = Product::inRandomOrder()->first();
+            $datetime = fake()->dateTimeBetween('-3 years');
             PointOfSale::create([
                 'product_name' => $product->product_name,
                 'final_price_capital' => $product->product_price_capital,
                 'final_price_sell' => $product->product_price_sell,
-                'quantity' => random_int(1, 10)
+                'quantity' => random_int(1, 10),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ]);
         }
     }

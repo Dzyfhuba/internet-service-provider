@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Models\PointOfSale;
+use App\Models\Product;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -24,7 +26,9 @@ class DashboardController extends Controller
   public function __invoke(Request $request)
   {
     $data = [
-      "admin_online" => $this->user_service->get_admin_online()
+      "admin_online" => $this->user_service->get_admin_online(),
+      'total_products' => Product::count(),
+      'total_transactions' => PointOfSale::count()
     ];
 
     return $this->view_admin("admin.index", "Dashboard", $data, TRUE);
