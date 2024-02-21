@@ -25,15 +25,14 @@ class ProductOfSaleService extends BaseService
      */
     private function generate_query_get(Request $request)
     {
-        $column_search = ["p.product_name", "p.product_description"];
+        $column_search = ["product_name"];
         $column_order = [
-            NULL, "p.product_name", "p.product_description", 'product_sales.final_price_capital', 'product_sales.final_price_sell',
-            'product_sales.quantity'
+            NULL, "product_name", "product_description", 'final_price_capital', 'final_price_sell',
+            'quantity'
         ];
         $order = ["product_sales.id" => "DESC"];
 
         $results = ProductOfSale::query()
-            ->join('products as p', 'p.id', '=', 'product_sales.product_id')
             ->where(function ($query) use ($request, $column_search) {
                 $i = 1;
                 if (isset($request->search)) {
@@ -82,7 +81,12 @@ class ProductOfSaleService extends BaseService
     {
         try {
             $values = $request->validated();
-            $item = ProductOfSale::create($values);
+            $product = Product::find($values['product_id']);
+            $item = ProductOfSale::create([
+                'product_name' => $product['product_name'],
+                'final_price_capital' => $product['product_price_capital'],
+                'final_price_sell' => $product['product_price_sell'],
+            ]);
 
             $response = \response_success_default("Berhasil menambahkan penjualan produk!", $item->id, route("app.product-of-sales.index"));
         } catch (\Exception $e) {

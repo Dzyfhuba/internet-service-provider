@@ -13,23 +13,8 @@ class ProductOfSale extends Model
     protected $table = 'product_sales';
 
     protected $fillable = [
-        'product_id',
+        'product_name',
         'final_price_capital',
         'final_price_sell',
     ];
-
-    public function product()
-    {
-        return $this->hasOne(Product::class);
-    }
-
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            $product = Product::find($model->product_id);
-            $model->final_price_capital = $product->product_price_capital;
-            $model->final_price_sell = $product->product_price_sell;
-        });
-    }
-
 }
