@@ -10,8 +10,6 @@ class PointOfSale extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'product_sales';
-
     protected $fillable = [
         'product_name',
         'final_price_capital',

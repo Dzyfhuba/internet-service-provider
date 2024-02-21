@@ -37,7 +37,7 @@ class PointOfSaleController extends Controller
         foreach ($list as $item) {
             $no++;
             $row = [];
-            $row[] = $no;
+            $row[] = $item->id;
             $row[] = $item->product_name;
             $row[] = $item->quantity;
             $row[] = rupiah($item->final_price_capital * $item->quantity);
@@ -127,9 +127,9 @@ class PointOfSaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PointOfSale $item)
+    public function destroy(PointOfSale $pointOfSale)
     {
-        $item->delete();
+        $pointOfSale->delete();
         $response = \response_success_default("Berhasil hapus pencatatan product!", FALSE, \route("app.point-of-sales.index"));
         return \response_json($response);
     }

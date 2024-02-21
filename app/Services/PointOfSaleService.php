@@ -30,7 +30,7 @@ class PointOfSaleService extends BaseService
             NULL, "product_name", "product_description", 'final_price_capital', 'final_price_sell',
             'quantity'
         ];
-        $order = ["product_sales.id" => "DESC"];
+        $order = ["id" => "DESC"];
 
         $results = PointOfSale::query()
             ->where(function ($query) use ($request, $column_search) {

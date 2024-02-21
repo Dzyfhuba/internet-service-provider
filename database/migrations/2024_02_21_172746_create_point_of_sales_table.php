@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_sales', function (Blueprint $table) {
+        Schema::create('point_of_sales', function (Blueprint $table) {
             $table->id();
             $table->string('product_name');
             $table->integer('final_price_capital');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_sales');
+        Schema::dropIfExists('point_of_sales');
     }
 };
