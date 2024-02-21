@@ -87,8 +87,27 @@ if (!function_exists("form_delete")) {
   }
 }
 
+if (!function_exists("form_update")) {
+  function form_update($formID, $route) {
+    $html = "<form id='$formID' action='$route' method='POST' with-submit-crud>";
+    $html .= "<input type='hidden' name='_token' value='".csrf_token()."'>";
+    $html .= "<input type='hidden' name='_method' value='PUT'>";
+
+    $html .= "<a class='btn btn-warning btn-sm' href='$route'>Edit</a>";
+    $html .= "</form>";
+
+    return $html;
+  }
+}
+
 if (!function_exists("check_authorized")) {
   function check_authorized($module_code) {
     return (new \App\Services\AuthorizationService)->check_authorization($module_code);
   }
 }
+
+if (!function_exists("rupiah")) {
+    function rupiah($expression) {
+      return 'Rp. ' . number_format($expression, 0, ',', '.');
+    }
+  }

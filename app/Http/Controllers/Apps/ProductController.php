@@ -25,7 +25,7 @@ class ProductController extends Controller
     public function index(): View
     {
         $data = Product::all();
-        return $this->view_admin('admin.products.index', 'Produk', first_page: false);
+        return $this->view_admin('admin.products.index', 'Produk', first_page: true);
     }
 
     public function get(Request $request)
@@ -42,10 +42,11 @@ class ProductController extends Controller
             $row[] = $no;
             $row[] = $item->product_name;
             $row[] = $item->product_description;
-            $row[] = $item->product_price_capital;
-            $row[] = $item->product_price_sell;
+            $row[] = rupiah($item->product_price_capital);
+            $row[] = rupiah($item->product_price_sell);
             $button = "<a href='" . \route("app.products.show", $item->id) . "' class='btn btn-info btn-sm m-1'>Detail</a>";
             $button .= form_delete("form$item->id", route("app.products.destroy", $item->id));
+            $button .= form_update("form$item->id", route("app.products.edit", $item->id));
             $row[] = $button;
             $data[] = $row;
         }
@@ -88,9 +89,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return $this->view_admin("admin.products.show", "Detail Product", [
+            'data' => $product
+        ]);
     }
 
     /**
@@ -99,9 +102,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        return $this->view_admin('admin.products.edit', "Edit Produk: {$product->product_name}", [
+            'data' => $product
+        ]);
     }
 
     /**
@@ -111,9 +116,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $response = $this->service->update($request, $product);
+        return \response_json($response);
     }
 
     /**
@@ -122,8 +128,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        $response = \response_success_default("Berhasil hapus produk!", FALSE, \route("app.products.index"));
+        return \response_json($response);
     }
 }

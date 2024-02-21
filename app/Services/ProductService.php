@@ -91,25 +91,19 @@ class ProductService extends BaseService
      * Update new user
      *
      * @param Request $request
-     * @param User $user
+     * @param User $product
      */
-    public function update(UserRequest $request, User $user)
+    public function update(ProductRequest $request, Product $product)
     {
         try {
-            $user_id = $user->id;
+            $product_id = $product->id;
             $values = $request->validated();
-            if ($values["password"]) {
-                $values["password"] = Hash::make($values["password"]);
-            } else {
-                unset($values["password"]);
-            }
 
-            // dd($values);
-            $user->update($values);
+            $product->update($values);
 
-            $response = \response_success_default("Berhasil update data user!", $user_id, route("app.users.show", $user->id));
+            $response = \response_success_default("Berhasil update data produk!", $product_id, route("app.products.show", $product->id));
         } catch (\Exception $e) {
-            ErrorService::error($e, "Gagal update user!");
+            ErrorService::error($e, "Gagal update produk!");
             $response = \response_errors_default();
         }
 

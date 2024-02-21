@@ -5,13 +5,13 @@
   <div class="card">
     <div class="card-body">
 
-      <form action="{{ route('app.users.update', $data->id) }}" method="POST" with-submit-crud>
+      <form action="{{ route('app.products.update', $data->id) }}" method="POST" with-submit-crud>
         @csrf
         @method("PUT")
 
-        @include('admin.users.form')
+        @include('admin.products.form')
 
-        <button class="btn btn-success btn-sm mt-3">Update User</button>
+        <button class="btn btn-success btn-sm mt-3">Update Produk</button>
 
       </form>
 

@@ -264,6 +264,50 @@ const CORE = {
         });
     },
 
+    promptDeleteFetchRoute(url, message) {
+        Swal.fire({
+            title: "Anda yakin?",
+            text: message,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, lakukan ini!",
+        }).then((result) => {
+            if (result.value) {
+                CORE.showLoadAdmin();
+
+                // const form = document.querySelector(`#${formId}`);
+                const fulUrl = url;
+
+                fetch(fulUrl, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": CORE.csrfToken,
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((response) => {
+                        CORE.removeLoadAdmin();
+                        CORE.sweet("success", "Berhasil!", response.message);
+                        window.setTimeout(
+                            () => (window.location.href = response.next_url),
+                            700
+                        );
+                    })
+                    .catch((err) => {
+                        CORE.removeLoadAdmin();
+                        CORE.sweet(
+                            "error",
+                            "Gagal!",
+                            "Terjadi kesalahan server!"
+                        );
+                    });
+            }
+        });
+    },
+
     async submitFormCrud(form) {
         const url = form.action;
         const method = form.method;
