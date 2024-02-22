@@ -42,6 +42,7 @@ Route::get("/logout", function () {
 
 Route::middleware(["auth", "check_maintanance", "check_session_token"])->group(function () {
     Route::get("/app/dashboard", DashboardController::class)->name("app.dashboard")->middleware("check_authorized:002D");
+    Route::get("/app/dashboard/get", [DashboardController::class, 'get'])->name("app.dashboard.get")->middleware("check_authorized:002D");
 
     Route::resource("/app/products", ProductController::class, ["as" => "app"])->middleware("check_authorized:003U|004R")->except('post');
     Route::post("/app/products/get", [ProductController::class, "get"])->name("app.products.get")->middleware("check_authorized:003U|004R");

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PointOfSale;
 use App\Models\Product;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -32,5 +33,17 @@ class DashboardController extends Controller
     ];
 
     return $this->view_admin("admin.index", "Dashboard", $data, TRUE);
+  }
+
+  public function get()
+  {
+    $monthlySales = PointOfSale::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(id) as sale_count')
+        ->whereBetween('created_at', [Carbon::now()->subMonths(6), Carbon::now()->subMonth()])
+        ->groupBy('year', 'month')
+        ->get();
+
+    return response()->json([
+        'monthlySales' => $monthlySales
+    ]);
   }
 }
