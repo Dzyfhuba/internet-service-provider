@@ -56,10 +56,28 @@
     </div>
     <div class="card min-w-sm">
         <div class="card-header">
-            <h5>Transaksi 6 bulan lalu</h5>
+            <h5>Transaksi 6 Bulan Lalu</h5>
         </div>
         <div class="card-body">
             <div id="transaction"></div>
+        </div>
+    </div>
+
+    <div class="card min-w-sm">
+        <div class="card-header">
+            <h5>Jumlah Transaksi Setiap Produk Tahun {{ explode('-', now()->subYear())[0] }}</h5>
+        </div>
+        <div class="card-body">
+            <div id="productTransactionsLastYear"></div>
+        </div>
+    </div>
+
+    <div class="card min-w-sm">
+        <div class="card-header">
+            <h5>Jumlah Transaksi Setiap Produk Tahun {{ now()->year }}</h5>
+        </div>
+        <div class="card-body">
+            <div id="productTransactionsThisYear"></div>
         </div>
     </div>
 
@@ -79,8 +97,8 @@
                     })
                     .then(res => res.json())
                     .then((data) => {
+                        // ============== 6 months ago ====================
                         const monthlySales = data.monthlySales;
-                        console.log(monthlySales)
 
                         var options = {
                             chart: {
@@ -120,8 +138,94 @@
                             }
                         };
 
-                        const chart = new ApexCharts(document.querySelector("#transaction"), options);
-                        chart.render()
+                        const chart1 = new ApexCharts(document.querySelector("#transaction"), options);
+                        chart1.render()
+
+                        // ================== product sale a year ago =======================
+                        const productTransactionsLastYear = data.productTransactionsLastYear;
+
+                        const chart2 = new ApexCharts(document.querySelector("#productTransactionsLastYear"), {
+                            chart: {
+                                type: 'bar',
+                                height: 300
+                            },
+                            series: [{
+                                name: 'Transaction Count',
+                                data: productTransactionsLastYear.map(function(item) {
+                                    return item.transaction_count;
+                                })
+                            }],
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    dataLabels: {
+                                        position: 'top', // top, center, bottom
+                                    },
+                                }
+                            },
+
+                            xaxis: {
+                                categories: productTransactionsLastYear.map(function(item) {
+                                    return item.product_name;
+                                }),
+                                labels: {
+                                    rotate: -45,
+                                    style: {
+                                        fontSize: '12px'
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'Transaction Count'
+                                }
+                            },
+
+                        });
+                        chart2.render()
+
+                        // ================ product sale a current year =============
+                        const productTransactionsThisYear = data.productTransactionsThisYear;
+
+                        const chart3 = new ApexCharts(document.querySelector("#productTransactionsThisYear"), {
+                            chart: {
+                                type: 'bar',
+                                height: 300
+                            },
+                            series: [{
+                                name: 'Transaction Count',
+                                data: productTransactionsThisYear.map(function(item) {
+                                    return item.transaction_count;
+                                })
+                            }],
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    dataLabels: {
+                                        position: 'top', // top, center, bottom
+                                    },
+                                }
+                            },
+
+                            xaxis: {
+                                categories: productTransactionsThisYear.map(function(item) {
+                                    return item.product_name;
+                                }),
+                                labels: {
+                                    rotate: -45,
+                                    style: {
+                                        fontSize: '12px'
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                title: {
+                                    text: 'Transaction Count'
+                                }
+                            },
+
+                        });
+                        chart3.render()
                     })
             });
         </script>
